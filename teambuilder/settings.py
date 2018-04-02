@@ -125,3 +125,7 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 MEDIA_URL = '/files/'
+
+
+
+LOGIN_REDIRECT_URL = "home"
