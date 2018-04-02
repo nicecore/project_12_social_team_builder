@@ -25,8 +25,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^test/', TemplateView.as_view(template_name='index.html'))
+    url(r'^test/', TemplateView.as_view(template_name='profile.html'))
 ]
 
-# urlpatterns += staticfiles_urlpatterns()
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()
