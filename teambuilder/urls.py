@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='layout.html'), name='home'),
     url(r'^accounts/', include("accounts.urls", namespace="accounts")),
     url(r'^accounts/', include("django.contrib.auth.urls")),
+    url(r'^projects/', include("projects.urls", namespace="projects"))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

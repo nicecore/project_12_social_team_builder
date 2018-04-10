@@ -8,5 +8,5 @@ urlpatterns = [
     # url(r"profile/$", views.ProfileView.as_view(), name="profile"),
     url(r"profile/$", views.show_profile, name='profile'),
     # url(r"profile/edit/$", views.edit_profile, name='edit_profile'),
-    url(r"profile/(?P<pk>\d+)/edit-test/$", views.EditProfile.as_view(), name='edit')
+    url(r"profile/(?P<pk>\d+)/edit/$", views.EditProfile.as_view(), name='edit')
 ]

@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -20,7 +20,7 @@ class LogoutView(generic.RedirectView):
 
 
 class RegisterView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = forms.UserCreateForm
     success_url = reverse_lazy('home')
     template_name = "accounts/signup.html"
 
@@ -34,7 +34,12 @@ class RegisterView(generic.CreateView):
 
 def show_profile(request):
     profile = request.user.userprofile
-    return render(request, 'accounts/profile.html', {'profile': profile})
+    skills = profile.skills.all()
+    return render(
+        request,
+        'accounts/profile.html',
+        {'profile': profile, 'skills': skills}
+    )
 
 
 # def edit_profile(request):
@@ -53,5 +58,5 @@ def show_profile(request):
 
 class EditProfile(UpdateView):
     model = models.UserProfile
-    fields = ['avatar', 'bio']
+    fields = ['avatar', 'bio', 'skills']
     success_url = reverse_lazy('accounts:profile')
