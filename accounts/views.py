@@ -32,7 +32,16 @@ class RegisterView(generic.CreateView):
 #     pass
 
 
-def show_profile(request):
+def show_any_profile(request, pk):
+    profile = models.UserProfile.objects.get(id=pk)
+    skills = profile.skills.all()
+    return render(
+        request,
+        'accounts/profile.html',
+        {'profile': profile, 'skills': skills}
+    )
+
+def show_current_user_profile(request):
     profile = request.user.userprofile
     skills = profile.skills.all()
     return render(
@@ -42,21 +51,7 @@ def show_profile(request):
     )
 
 
-# def edit_profile(request):
-#     form = forms.ProfileForm(instance=request.user.userprofile)
-#     if request.method == "POST":
-#         form = forms.ProfileForm(
-#             data=request.POST,
-#             instance=request.user.userprofile,
-#             files=request.FILES
-#         )
-#         if form.is_valid():
-#             form.save()
-#             return redirect(reverse('accounts:profile'))
-#     return render(request, 'accounts/profile_edit.html', {'form': form})
-
-
 class EditProfile(UpdateView):
     model = models.UserProfile
     fields = ['avatar', 'bio', 'skills']
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('accounts:current_user_profile')

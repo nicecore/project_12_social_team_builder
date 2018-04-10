@@ -20,13 +20,14 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
+from . import views
 
 
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='layout.html'), name='home'),
+    url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^accounts/', include("accounts.urls", namespace="accounts")),
     url(r'^accounts/', include("django.contrib.auth.urls")),
     url(r'^projects/', include("projects.urls", namespace="projects"))

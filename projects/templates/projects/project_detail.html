@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+        {% if request.user == project.owner %}
+        <a class="button" href="{% url 'projects:edit_project' pk=project.pk %}">Edit Project</a>
+        <a class="button button-text" href="#">Delete Project</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--header">
+        <h4 class="circle--article--section">Project</h4>
+        <h1 class="circle--article--title">{{ project.title }}</h1>
+        <p class="circle--article--byline">Project Owner: <a href="{% url 'accounts:any_profile' pk=project.owner.profile.id %}">{{ project.owner.username }}</a></p>
+      </div>
+
+      <div class="circle--article--body">
+        <p>{{ project.description }}</p>
+      </div>
+
+      <div class="circle--project--positions">
+        <h2>Positions</h2>
+        {% if positions %}
+        <p>Positions here</p>
+        {% else %}
+        <p>There are no positions for this project yet! Click <a href="{% url 'projects:new_position' project_pk=project.id %}">here</a> to add one!</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <div class="grid-25 grid-push-5">
+      <div class="circle--secondary--module">
+        <h3>Project Needs</h3>
+        <ul class="circle--link--list">
+<!--           <li><a>iOS Developer</a></li>
+          <li><a>Designer</a></li> -->
+        </ul>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+        <p>{{ project.timeline }}</p>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Applicant Requirements</h3>
+        <p>{{ project.requirements }}</p>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

@@ -3,11 +3,11 @@
 {% block content %}
   <div class="bounds">
     <div class="grid-50 centered">
-      <h2>Register</h2>
+      <h2>New Project</h2>
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Register">
+        <input type="submit" value="Save">
       </form>
     </div>
   </div>

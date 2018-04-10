@@ -5,7 +5,7 @@
   <nav class="bounds">
     <ul class="circle--pill--list">
       <li><a href="applications.html">Applications</a></li>
-      <li><a class="selected" href="{% url 'accounts:profile' %}">Profile</a></li>
+      <li><a class="selected" href="{% url 'accounts:current_user_profile' %}">Profile</a></li>
     </ul>
   </nav>
 </div>
@@ -22,7 +22,9 @@
 
   <div class="grid-70">
     <h1>{{ profile.user.username }}</h1>
+    {% if profile.avatar %}
     <img src="{{ profile.avatar.url }}">
+    {% endif %}
     <hr>
     <div class="circle--article--body">
       <p>{{ profile.bio }}</p>
