@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
+import notifications.urls
 
 from . import views
 
@@ -30,7 +31,8 @@ urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^accounts/', include("accounts.urls", namespace="accounts")),
     url(r'^accounts/', include("django.contrib.auth.urls")),
-    url(r'^projects/', include("projects.urls", namespace="projects"))
+    url(r'^projects/', include("projects.urls", namespace="projects")),
+    url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

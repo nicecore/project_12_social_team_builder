@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 
-from .models import Project, Position
+from .models import Project, Position, Application
 
 
 
@@ -17,3 +17,4 @@ class PositionForm(forms.ModelForm):
     class Meta:
         model = Position
         fields = ['name', 'description', 'skill']
+

@@ -11,6 +11,8 @@ from . import models
 
 
 
+
+
 class LogoutView(generic.RedirectView):
     url = reverse_lazy('home')
 
@@ -42,7 +44,7 @@ def show_any_profile(request, pk):
     )
 
 def show_current_user_profile(request):
-    profile = request.user.userprofile
+    profile = request.user.profile
     skills = profile.skills.all()
     return render(
         request,

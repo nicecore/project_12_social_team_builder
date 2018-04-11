@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+
+{% block content %}
+<div class="circle--actions--bar">
+    <nav class="bounds">
+      <ul class="circle--pill--list">
+          <h2>Applications</h2>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="bounds circle--page">
+    <div class="grid-70">
+      <div class="circle--article--body">
+        {% for application in applications %}
+          <p>{{ application.applicant.first_name }} {{ application.applicant.last_name }} has applied for {{ application.position }}</p>
+          <button>Accept</button>
+          <button>Reject</button>
+          <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

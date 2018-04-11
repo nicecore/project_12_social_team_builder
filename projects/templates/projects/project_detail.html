@@ -28,7 +28,17 @@
       <div class="circle--project--positions">
         <h2>Positions</h2>
         {% if positions %}
-        <p>Positions here</p>
+        <ul class="circle--group--list">
+          {% for position in positions %}
+            <li>
+              <h3>{{ position.name }}</h3>
+              <p>
+                {{ position.description }}
+              </p>
+              <a class="button button-primary" href="{% url 'projects:apply' position_pk=position.id %}">Apply</a>
+            </li>
+          {% endfor %}
+        </ul>
         {% else %}
         <p>There are no positions for this project yet! Click <a href="{% url 'projects:new_position' project_pk=project.id %}">here</a> to add one!</p>
         {% endif %}
