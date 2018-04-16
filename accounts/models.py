@@ -23,7 +23,7 @@ class Skill(models.Model):
     name = models.CharField(choices=SKILL_CHOICES, max_length=50, default='')
 
     def __str__(self):
-        return self.name
+        return self.name.title()
 
 
 

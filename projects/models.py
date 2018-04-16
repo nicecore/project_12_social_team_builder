@@ -40,13 +40,13 @@ class Position(models.Model):
 
 class Application(models.Model):
     STATUS_CHOICES = (
-        ('A', 'Applied'),
-        ('S', 'Selected'),
-        ('D', 'Denied'),
+        ('P', 'Pending'),
+        ('A', 'Accepted'),
+        ('R', 'Rejected'),
     )
     applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="applications")
     position = models.ForeignKey(Position)
-    accepted = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
 
 
     def __str__(self):

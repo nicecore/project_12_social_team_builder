@@ -16,7 +16,7 @@
       <div class="circle--article--body">
         {% for application in applications %}
           <p>{{ application.applicant.first_name }} {{ application.applicant.last_name }} has applied for {{ application.position }}</p>
-          <button>Accept</button>
+          <button><a href="{% url 'projects:app_status' app_pk=application.pk status='accept' %}">Accept</a></button>
           <button>Reject</button>
           <hr>
         {% endfor %}

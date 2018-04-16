@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse_lazy
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
 from django.views import generic
@@ -99,3 +100,57 @@ def view_notifications(request):
 def view_applications(request):
     applications = Application.objects.filter(position__project__owner=request.user)
     return render(request, 'projects/applications.html', {'applications': applications})
+
+def app_status(request, app_pk, status):
+    application = Application.objects.get(id=app_pk)
+    if status == "accept":
+        application.status = "A"
+        application.save()
+        notify.send(
+            request.user,
+            recipient=application.applicant,
+            verb="{} accepted you for the position '{}'.".format(
+                request.user,
+                application.position.name
+            )
+        )
+        notify.send(
+            request.user,
+            recipient=request.user,
+            verb="You accepted {} for the position '{}'.".format(
+                application.applicant,
+                application.position
+            )
+        )
+    if status == "reject":
+        application.status = "R"
+        application.save()
+        notify.send(
+            request.user,
+            recipient="{} rejected you for the position '{}'".format(
+                request.user,
+                application.position.name
+            )
+        )
+        notify.send(
+            request.user,
+            recipient="You rejected {} for the position '{}'".format(
+                request.user,
+                application.position.name
+            )
+        )
+    return HttpResponseRedirect(reverse('home'))
+
+
+def search(request):
+    term = request.GET.get('q')
+    projects = Project.objects.filter(
+        Q(title__icontains=term) | Q(description__icontains=term)
+    )
+    return render(request, "projects/search.html", {"projects": projects})
+
+
+def by_skill(request, skill):
+    projects = Project.objects.filter(positions__skill__name=skill)
+    print("output: {}".format(projects))
+    return render(request, "projects/search.html", {'projects': projects})

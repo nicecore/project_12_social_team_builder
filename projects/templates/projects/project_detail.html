@@ -9,6 +9,9 @@
         <a class="button" href="{% url 'projects:edit_project' pk=project.pk %}">Edit Project</a>
         <a class="button button-text" href="#">Delete Project</a>
         {% endif %}
+        {% if request.user is project.owner %}
+        <a class="button button-text" href="{% url 'projects:new_position' %}">Add Position</a>
+        {% endif %}
       </div>
     </div>
   </div>
