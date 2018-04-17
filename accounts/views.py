@@ -1,5 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -8,9 +10,6 @@ from django.views.generic.edit import UpdateView
 
 from . import forms
 from . import models
-
-
-
 
 
 class LogoutView(generic.RedirectView):
@@ -25,13 +24,6 @@ class RegisterView(generic.CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy('home')
     template_name = "accounts/signup.html"
-
-
-
-
-# class ProfileView(generic.TemplateView):
-#     # Needs to grab a user and pass it to the template so we can access their name and bio
-#     pass
 
 
 def show_any_profile(request, pk):
@@ -53,7 +45,13 @@ def show_current_user_profile(request):
     )
 
 
-class EditProfile(UpdateView):
+class EditProfile(LoginRequiredMixin, UpdateView):
     model = models.UserProfile
     fields = ['avatar', 'bio', 'skills']
     success_url = reverse_lazy('accounts:current_user_profile')
+
+    def form_valid(self, form):
+        if form.instance.user == self.request.user:
+            return super(EditProfile, self).form_valid(form)
+        else:
+            raise PermissionDenied

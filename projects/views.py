@@ -1,3 +1,6 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -13,7 +16,7 @@ def show_all_projects(request):
     projects = Project.objects.all()
     return render(request, 'projects/projects.html', {'projects': projects})
 
-
+@login_required
 def project_detail(request, project_pk):
     project = Project.objects.get(id=project_pk)
     positions = project.positions.all()
@@ -23,7 +26,7 @@ def project_detail(request, project_pk):
         {'project': project, 'positions': positions})
 
 
-class NewProject(generic.CreateView):
+class NewProject(LoginRequiredMixin, generic.CreateView):
     """CBV for creating a new Project instance"""
     form_class = ProjectForm
     success_url = reverse_lazy('home')
@@ -38,11 +41,17 @@ class NewProject(generic.CreateView):
     #     return super(NewProject, self).form_valid(form)
 
 
-class EditProject(generic.UpdateView):
+class EditProject(LoginRequiredMixin, generic.UpdateView):
     model = Project
     fields = ['title', 'description', 'requirements', 'timeline', 'complete']
 
+    def form_valid(self, form):
+        if form.instance.owner == self.request.user:
+            return super(NewProject, self).form_valid(form)
+        else:
+            raise PermissionDenied
 
+@login_required
 def new_position(request, project_pk):
     project = Project.objects.get(id=project_pk)
     if request.method == 'POST':
@@ -56,7 +65,7 @@ def new_position(request, project_pk):
         form = PositionForm()
     return render(request, 'projects/new_position.html', {'form': form})
 
-
+@login_required
 def apply(request, position_pk):
 
     position = Position.objects.get(id=position_pk)
@@ -91,16 +100,17 @@ def apply(request, position_pk):
 
     return HttpResponseRedirect(reverse('home'))
 
-
+@login_required
 def view_notifications(request):
     unread_notifs = request.user.notifications.unread()
     return render(request, 'projects/notifications.html', {'unread_notifs': unread_notifs})
 
-
+@login_required
 def view_applications(request):
     applications = Application.objects.filter(position__project__owner=request.user)
     return render(request, 'projects/applications.html', {'applications': applications})
 
+@login_required
 def app_status(request, app_pk, status):
     application = Application.objects.get(id=app_pk)
     if status == "accept":
@@ -141,6 +151,16 @@ def app_status(request, app_pk, status):
         )
     return HttpResponseRedirect(reverse('home'))
 
+@login_required
+def delete_project(request, project_pk):
+    project = Project.objects.get(id=project_pk)
+    if request.user == project.owner:
+        project.delete()
+        return HttpResponseRedirect(reverse('home'))
+    else:
+        raise PermissionDenied
+
+
 
 def search(request):
     term = request.GET.get('q')
@@ -154,3 +174,4 @@ def by_skill(request, skill):
     projects = Project.objects.filter(positions__skill__name=skill)
     print("output: {}".format(projects))
     return render(request, "projects/search.html", {'projects': projects})
+

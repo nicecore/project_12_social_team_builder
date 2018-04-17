@@ -21,7 +21,7 @@ class Project(models.Model):
 
 
     def __str__(self):
-        return "{}, by {}".format(self.title, self.owner)
+        return self.title
 
     def get_absolute_url(self):
         return reverse('projects:project_detail', kwargs={'project_pk': self.id})
@@ -35,7 +35,7 @@ class Position(models.Model):
     filled = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} for {}, a project owned by {}".format(self.name, self.project.title, self.project.owner)
+        return self.name
 
 
 class Application(models.Model):

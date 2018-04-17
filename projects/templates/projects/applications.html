@@ -15,9 +15,15 @@
     <div class="grid-70">
       <div class="circle--article--body">
         {% for application in applications %}
-          <p>{{ application.applicant.first_name }} {{ application.applicant.last_name }} has applied for {{ application.position }}</p>
+          {% if application.status == 'P' %}
+          <p><a href="{% url 'accounts:any_profile' pk=application.applicant.profile.id %}">{{ application.applicant.first_name }} {{ application.applicant.last_name }}</a> has applied for the position "{{ application.position }}" in project "<a href="{% url 'projects:project_detail' project_pk=application.position.project.id %}">{{ application.position.project }}"</a></p>
           <button><a href="{% url 'projects:app_status' app_pk=application.pk status='accept' %}">Accept</a></button>
-          <button>Reject</button>
+          <button><a href="{% url 'projects:app_status' app_pk=application.pk status='reject' %}">Reject</a></button>
+          {% elif application.status == 'A' %}
+          <p>You accepted <a href="{% url 'accounts:any_profile' pk=application.applicant.profile.id %}">{{ application.applicant.first_name }} {{ application.applicant.last_name }}'s</a> application for the position "{{ application.position }}" in project "<a href="{% url 'projects:project_detail' project_pk=application.position.project.id %}">{{ application.position.project }}"!</p>
+          {% elif application.status == 'R' %}
+          <p>You rejected <a href="{% url 'accounts:any_profile' pk=application.applicant.profile.id %}">{{ application.applicant }}'s</a> application for the position "{{ application.position }}"!</p>
+          {% endif %}
           <hr>
         {% endfor %}
       </div>

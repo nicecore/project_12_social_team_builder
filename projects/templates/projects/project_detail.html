@@ -6,8 +6,8 @@
     <div class="bounds">
       <div class="grid-100">
         {% if request.user == project.owner %}
-        <a class="button" href="{% url 'projects:edit_project' pk=project.pk %}">Edit Project</a>
-        <a class="button button-text" href="#">Delete Project</a>
+        <a class="button" href="{% url 'projects:edit_project' pk=project.id %}">Edit Project</a>
+        <a class="button button-text" href="{% url 'projects:delete' project_pk=project.id %}">Delete Project</a>
         {% endif %}
         {% if request.user is project.owner %}
         <a class="button button-text" href="{% url 'projects:new_position' %}">Add Position</a>
@@ -30,7 +30,10 @@
 
       <div class="circle--project--positions">
         <h2>Positions</h2>
+
         {% if positions %}
+        <a class="button button-primary" href="{% url 'projects:new_position' project_pk=project.id %}">Add Position</a>
+
         <ul class="circle--group--list">
           {% for position in positions %}
             <li>
@@ -38,7 +41,12 @@
               <p>
                 {{ position.description }}
               </p>
+              <p>
+                Skill required: {{ position.skill }}
+              </p>
+              {% if request.user != project.owner %}
               <a class="button button-primary" href="{% url 'projects:apply' position_pk=position.id %}">Apply</a>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>

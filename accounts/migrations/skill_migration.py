@@ -4,22 +4,14 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
+skills = ['android', 'designer', 'java', 'php', 'python', 'rails', 'wordpress', 'ios']
 
 
 def make_skills(apps, schema_editor):
     Skill = apps.get_model('accounts', 'Skill')
-    objs = [
-        Skill(name='android'),
-        Skill(name='designer'),
-        Skill(name='java'),
-        Skill(name='php'),
-        Skill(name='python'),
-        Skill(name='rails'),
-        Skill(name='wordpress'),
-        Skill(name='ios'),
-    ]
-    Skill.objects.bulk_create(objs)
-    Skill.objects.save()
+
+    for skill in skills:
+        Skill.objects.create(name=skill)
 
 
 class Migration(migrations.Migration):
@@ -31,3 +23,4 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(make_skills)
     ]
+

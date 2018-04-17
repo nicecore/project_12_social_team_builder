@@ -21,7 +21,7 @@
   </div>
 
   <div class="grid-70">
-    <h1>{{ profile.user.username }}</h1>
+    <h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
     {% if profile.avatar %}
     <img src="{{ profile.avatar.url }}">
     {% endif %}
