@@ -35,6 +35,7 @@ def show_any_profile(request, pk):
         {'profile': profile, 'skills': skills}
     )
 
+
 def show_current_user_profile(request):
     profile = request.user.profile
     skills = profile.skills.all()

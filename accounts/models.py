@@ -5,8 +5,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-
-
 class Skill(models.Model):
 
     SKILL_CHOICES = (
@@ -26,9 +24,9 @@ class Skill(models.Model):
         return self.name.title()
 
 
-
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(upload_to='avatars/', blank=True)
     bio = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill)
@@ -37,10 +35,9 @@ class UserProfile(models.Model):
         return self.user.username.title() + "'s User Profile"
 
 # Create new UserProfile object upon creation of new User
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-
-
-

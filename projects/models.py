@@ -4,9 +4,6 @@ from django.db import models
 from django.urls import reverse
 
 
-
-
-
 class Project(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,7 +15,6 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-
 
     def __str__(self):
         return self.title
@@ -44,10 +40,11 @@ class Application(models.Model):
         ('A', 'Accepted'),
         ('R', 'Rejected'),
     )
-    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="applications")
+    applicant = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="applications")
     position = models.ForeignKey(Position)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
-
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOICES, default='A')
 
     def __str__(self):
         return "{}'s application to {}".format(self.applicant, self.position)

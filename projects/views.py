@@ -16,6 +16,7 @@ def show_all_projects(request):
     projects = Project.objects.all()
     return render(request, 'projects/projects.html', {'projects': projects})
 
+
 @login_required
 def project_detail(request, project_pk):
     project = Project.objects.get(id=project_pk)
@@ -47,9 +48,10 @@ class EditProject(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         if form.instance.owner == self.request.user:
-            return super(NewProject, self).form_valid(form)
+            return super(EditProject, self).form_valid(form)
         else:
             raise PermissionDenied
+
 
 @login_required
 def new_position(request, project_pk):
@@ -64,6 +66,7 @@ def new_position(request, project_pk):
     else:
         form = PositionForm()
     return render(request, 'projects/new_position.html', {'form': form})
+
 
 @login_required
 def apply(request, position_pk):
@@ -87,7 +90,8 @@ def apply(request, position_pk):
     notify.send(
         request.user,
         recipient=request.user,
-        verb="You applied to {} in project '{}'".format(position.name, project.title)
+        verb="You applied to {} in project '{}'".format(
+            position.name, project.title)
     )
 
     notify.send(
@@ -100,15 +104,19 @@ def apply(request, position_pk):
 
     return HttpResponseRedirect(reverse('home'))
 
+
 @login_required
 def view_notifications(request):
     unread_notifs = request.user.notifications.unread()
     return render(request, 'projects/notifications.html', {'unread_notifs': unread_notifs})
 
+
 @login_required
 def view_applications(request):
-    applications = Application.objects.filter(position__project__owner=request.user)
+    applications = Application.objects.filter(
+        position__project__owner=request.user)
     return render(request, 'projects/applications.html', {'applications': applications})
+
 
 @login_required
 def app_status(request, app_pk, status):
@@ -151,6 +159,7 @@ def app_status(request, app_pk, status):
         )
     return HttpResponseRedirect(reverse('home'))
 
+
 @login_required
 def delete_project(request, project_pk):
     project = Project.objects.get(id=project_pk)
@@ -159,7 +168,6 @@ def delete_project(request, project_pk):
         return HttpResponseRedirect(reverse('home'))
     else:
         raise PermissionDenied
-
 
 
 def search(request):
@@ -174,4 +182,3 @@ def by_skill(request, skill):
     projects = Project.objects.filter(positions__skill__name=skill)
     print("output: {}".format(projects))
     return render(request, "projects/search.html", {'projects': projects})
-

@@ -14,6 +14,7 @@
   <div class="bounds circle--page">
     <div class="grid-70">
       <div class="circle--article--body">
+      {% if applications %}
         {% for application in applications %}
           {% if application.status == 'P' %}
           <p><a href="{% url 'accounts:any_profile' pk=application.applicant.profile.id %}">{{ application.applicant.first_name }} {{ application.applicant.last_name }}</a> has applied for the position "{{ application.position }}" in project "<a href="{% url 'projects:project_detail' project_pk=application.position.project.id %}">{{ application.position.project }}"</a></p>
@@ -26,6 +27,9 @@
           {% endif %}
           <hr>
         {% endfor %}
+      {% else %}
+      <p>No one has applied to any position yet!</p>
+      {% endif %}
       </div>
     </div>
   </div>

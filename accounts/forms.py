@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
@@ -15,7 +16,8 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'first_name',
+                  'last_name', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super(UserCreateForm, self).save(commit=False)

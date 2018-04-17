@@ -24,15 +24,14 @@ import notifications.urls
 from . import views
 
 
-
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^accounts/', include("accounts.urls", namespace="accounts")),
     url(r'^accounts/', include("django.contrib.auth.urls")),
     url(r'^projects/', include("projects.urls", namespace="projects")),
-    url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    url('^inbox/notifications/',
+        include(notifications.urls, namespace='notifications')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
