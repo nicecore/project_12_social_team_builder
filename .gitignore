@@ -1,5 +1,0 @@
-venv/
-*.sublime-project
-*.sublime-workspace
-*.sqlite3
-*.gitignore
