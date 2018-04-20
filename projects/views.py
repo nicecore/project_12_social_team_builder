@@ -121,9 +121,12 @@ def view_applications(request):
 @login_required
 def app_status(request, app_pk, status):
     application = Application.objects.get(id=app_pk)
+    position = Position.objects.get(application__id=application.id)
     if status == "accept":
         application.status = "A"
         application.save()
+        position.filled = True
+        position.save()
         notify.send(
             request.user,
             recipient=application.applicant,

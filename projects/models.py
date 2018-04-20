@@ -42,9 +42,14 @@ class Application(models.Model):
     )
     applicant = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="applications")
-    position = models.ForeignKey(Position)
+    position = models.ForeignKey(Position, related_name="application")
+    applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
-        max_length=1, choices=STATUS_CHOICES, default='A')
+        max_length=1, choices=STATUS_CHOICES, default='P')
+
+    class Meta:
+        ordering = ['-applied_at']
+
 
     def __str__(self):
         return "{}'s application to {}".format(self.applicant, self.position)
